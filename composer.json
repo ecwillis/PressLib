@@ -1,0 +1,24 @@
+{
+    "name": "glasscow/press-lib",
+    "description": "A Wordpress PHP API Client Library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eric Willis",
+            "email": "eric@ecwillis.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PressLib\\" : "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "jms/serializer": "^1.11"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
+    }
+}
