@@ -9,7 +9,10 @@ class Base {
   protected $endpoint;
   protected $base;
   public function __construct($host, $endpoint="") {
-    $this->base = "{$host}/wp-json/";
+
+    $h = trim($host, "/");
+    
+    $this->base = "{$h}/wp-json/";
     $this->endpoint = $endpoint;
     $this->client = new GClient([
       'base_uri' => $this->base,
@@ -67,9 +70,6 @@ class Base {
     $links = (property_exists($data, '_links')) ? $data->_links : [];
     unset($data->_links);
     
-    // echo "<pre>";
-    // echo str_replace("<", "&gt;", print_r($links, true));
-    // die();
     $postTagSlug = null;
     $postCatSlug = null;
     if (property_exists($links, 'wp:term') && is_array($links->{'wp:term'})) {
@@ -82,6 +82,17 @@ class Base {
           $postCatSlug = $termObj->href;
         }
       }
+    }
+
+    if (property_exists($links, 'author') && is_array($links->author)) {
+      $authUrl = (string) $links->author[0]->href;
+      $authEp = str_replace($this->base, "", $authUrl);
+
+      $authResp = $this->client->get($authEp);
+
+      $authData = $this->_handleResponse($authResp);
+      unset($authData->_links);
+      $data->author = $authData;
     }
     
     if (property_exists($data, 'categories') && is_array($data->categories) && count($data->categories) > 0 && $postCatSlug !== null) {
