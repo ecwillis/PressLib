@@ -44,7 +44,7 @@ class Base {
   }
 
   public function list($args = []) {
-    $resp = $this->client->get($this->endpoint);
+    $resp = $this->client->get($this->endpoint, $args);
     $data = $this->_handleResponse($resp);
 
     foreach($data as $obj) {
