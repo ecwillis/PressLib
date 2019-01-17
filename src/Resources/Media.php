@@ -17,12 +17,14 @@ class Media extends Base {
       throw new \Error('Resource not found');
     }
     $return = [];
-
     foreach ($data as $att) {
+      if ($att->media_type !== 'image') {
+        continue;
+      }
       $detailSizes = $att->media_details->sizes;
       try {
         $img = $detailSizes->{$size};
-      } catch ( ErrorException $e) { 
+      } catch ( \ErrorException $e) { 
         $img = $detailSizes->full;
       }
 
