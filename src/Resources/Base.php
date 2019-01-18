@@ -67,7 +67,7 @@ class Base {
     // Make rendered the parent item.
     $this->_pullRendered($data); 
 
-    $links = (property_exists($data, '_links')) ? $data->_links : [];
+    $links = (property_exists($data, '_links')) ? $data->_links : (object) [];
     unset($data->_links);
     
     $postTagSlug = null;
@@ -106,6 +106,8 @@ class Base {
         $obj->name = $cat->name;
         $obj->slug = $cat->slug;
         $obj->description = $cat->description;
+        $obj->id = $cat->id;
+        $obj->parent = $cat->parent;
 
         $catDataArr[] = $obj;
       }

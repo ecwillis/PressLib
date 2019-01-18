@@ -30,19 +30,21 @@ class Category extends Base {
   }
 
 
-  protected function _getChildren(&$list, $id) {
+  protected function _getChildren(&$list, $id, $depth, $curr=1) {
     $result = [];
     foreach($list as $key => $val) {
       if ($val->parent == $id) {
         $result[$val->id] = $val;
         unset($list[$key]);
-        $result[$val->id]->children = $this->_getChildren($list, $val->id);
+        if ($depth == 0 || $curr < $depth) {
+          $result[$val->id]->children = $this->_getChildren($list, $val->id, $depth, $curr + 1);
+        }  
       }
     }
     return $result;
   }
 
-  public function getMap() {
+  public function getMap($depth=0) {
     $all = $this->getAll();
     
     $map = [];
@@ -51,7 +53,7 @@ class Category extends Base {
       if ($cat->parent == 0) {
         $map[$cat->id] = $cat;
         unset($all[$key]);
-        $map[$cat->id]->children = $this->_getChildren($all, $cat->id);
+        $map[$cat->id]->children = $this->_getChildren($all, $cat->id, $depth);
       }
     }
 
