@@ -10,11 +10,11 @@ class Media extends Base {
 
   public function byParent($id, $size="full") {
     $resp = $this->client->get($this->endpoint, [ 'query' => [ 'parent' => $id ] ]);
-    
+
     $data = $this->_handleResponse($resp);
-    
     if (count($data) === 0) {
-      throw new \Error('Resource not found');
+      // do we need to throw for media here?
+      return $data;
     }
     $return = [];
     foreach ($data as $att) {
